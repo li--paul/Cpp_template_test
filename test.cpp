@@ -5,6 +5,7 @@
 #include <tuple>
 #include <memory>
 #include <sstream>
+#include <typeinfo>
 using namespace std;
 
 #define LOG cout
@@ -18,19 +19,22 @@ using namespace std;
         auto operator()(Args &&... args) const -> decltype(X(std::forward<Args>(args)...)) { return X(std::forward<Args>(args)...); } \
     }
 
-/*
+
 template <typename... Args>
 void print(Args... args)
 {
-    (void)(int[]){((LOG << args), 0)...};
+    (void)(int[]){((LOG << args << NL), 0)...};
+    auto tt = {((LOG << args << NL), 0)...};
+    LOG << typeid(tt).name() << '\n';
     LOG << NL;
 }
-*/
+/*
 template <typename T>
 void print(T t)
 {
     cout << t << endl;
 }
+*/
 
 make_citizen(print);
 
@@ -38,6 +42,6 @@ int main()
 {
     // let's test citizenship...
     tfn_print print;
-    print(5 + 8);
+    print(5, 8);
     print("hello");
 }
